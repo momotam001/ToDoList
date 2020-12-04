@@ -23,7 +23,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TASK = "task";
     private static final String STATUS = "status";
     private static final String CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                            + TASK + "TEXT, " + STATUS + "INTEGER)";
+                                            + TASK + " TEXT, " + STATUS + " INTEGER)";
 
     private SQLiteDatabase db;
 
@@ -47,12 +47,14 @@ public class Database extends SQLiteOpenHelper {
     public void openDatabase(){
         db = this.getWritableDatabase();
     }
+
     public void insertTask(ToDoModel task){
         ContentValues cv = new ContentValues();
         cv.put(TASK, task.getTask());
-        cv.put(STATUS, 0);
+        cv.put(STATUS, task.getStatus());
         db.insert(TODO_TABLE, null,cv);
     }
+
 
     public List<ToDoModel> getAllTasks(){
         List<ToDoModel> taskList = new ArrayList<>();
@@ -75,6 +77,7 @@ public class Database extends SQLiteOpenHelper {
         }
         finally {
             db.endTransaction();
+            assert cur != null;
             cur.close();
         }
      return taskList;

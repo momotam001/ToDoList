@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DialogCloseListener{
 
@@ -31,22 +32,23 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         db = new Database(this);
         db.openDatabase();
 
-        taskList = new ArrayList<>();
 
         taskRecyclerView = findViewById(R.id.tasksRecyclerView);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         tasksAdapter = new ToDoAdapter(db,this);
         taskRecyclerView.setAdapter(tasksAdapter);
 
-        fab = findViewById(R.id.fab);
+
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchDelete(tasksAdapter));
         itemTouchHelper.attachToRecyclerView(taskRecyclerView);
+
+        fab = findViewById(R.id.fab);
 
         taskList = db.getAllTasks();
         Collections.reverse(taskList);
@@ -55,11 +57,12 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddTask.newInstance().show(getSupportFragmentManager(),AddTask.TAG);
+                AddTask.newInstance().show(getSupportFragmentManager(), AddTask.TAG);
             }
         });
 
-    }
+        }
+
 
     @Override
     public void handleDialogClose(DialogInterface dialog){

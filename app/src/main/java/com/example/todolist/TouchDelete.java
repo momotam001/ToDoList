@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +27,12 @@ public class TouchDelete extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target){
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target){
         return false;
     }
 
     @Override
-    public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction){
+    public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction){
         final int position = viewHolder.getAdapterPosition();
         if(direction == ItemTouchHelper.LEFT){
             AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
@@ -58,14 +59,14 @@ public class TouchDelete extends ItemTouchHelper.SimpleCallback {
         }
     }
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
+    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
         Drawable icon;
         ColorDrawable background;
 
         View itemView = viewHolder.itemView;
-        int backgoundCornerOffset = 20;
+        int backgroundCornerOffset = 20;
 
         if(dX>0){
             icon = ContextCompat.getDrawable(adapter.getContext(), R.drawable.edit);
@@ -75,6 +76,8 @@ public class TouchDelete extends ItemTouchHelper.SimpleCallback {
             icon = ContextCompat.getDrawable(adapter.getContext(), R.drawable.delete);
             background = new ColorDrawable(Color.BLACK);
         }
+
+        assert icon != null;
         int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
         int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
         int iconBottom = iconTop + icon.getIntrinsicHeight();
@@ -84,7 +87,7 @@ public class TouchDelete extends ItemTouchHelper.SimpleCallback {
             int iconRight = itemView.getLeft() + iconMargin + icon.getIntrinsicWidth();
             icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
 
-            background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + ((int)dX) + backgoundCornerOffset, itemView.getBottom());
+            background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + ((int)dX) + backgroundCornerOffset, itemView.getBottom());
 
         }
         else if (dX<0){ // swipe left
@@ -92,7 +95,7 @@ public class TouchDelete extends ItemTouchHelper.SimpleCallback {
             int iconRight = itemView.getRight() - iconMargin + icon.getIntrinsicWidth();
             icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
 
-            background.setBounds(itemView.getRight() + ((int)dX) + backgoundCornerOffset, itemView.getTop(),
+            background.setBounds(itemView.getRight() + ((int)dX) + backgroundCornerOffset, itemView.getTop(),
                     itemView.getRight(), itemView.getBottom());
     }
         else {

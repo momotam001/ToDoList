@@ -6,7 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.todolist.Adapter.ToDoAdapter;
@@ -28,8 +34,18 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private List<ToDoModel> taskList;
     private Database db;
 
+    private boolean mDarkTheme;
+    private SharedPreferences mSharedPrefs;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mDarkTheme = mSharedPrefs.getBoolean(SettingsFragment.PREFERENCE_THEME, false);
+        if (mDarkTheme) {
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).hide();
@@ -40,9 +56,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
         taskRecyclerView = findViewById(R.id.tasksRecyclerView);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        tasksAdapter = new ToDoAdapter(db,this);
+        tasksAdapter = new ToDoAdapter(db, this);
         taskRecyclerView.setAdapter(tasksAdapter);
-
 
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchDelete(tasksAdapter));
@@ -61,7 +76,27 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
             }
         });
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.settings:
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
 
 
     @Override
@@ -72,4 +107,6 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         tasksAdapter.notifyDataSetChanged();
 
     }
+
+
 }

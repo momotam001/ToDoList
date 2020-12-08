@@ -18,9 +18,10 @@
             android:id="@+id/todoCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             tools:text="Sample"
             android:paddingLeft="8dp"
-            android:buttonTint="@android:color/holo_green_dark"/>
+            android:buttonTint="@android:color/holo_blue_dark"/>
     </RelativeLayout>
 
 

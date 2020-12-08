@@ -74,7 +74,7 @@ public class TouchDelete extends ItemTouchHelper.SimpleCallback {
         }
         else{
             icon = ContextCompat.getDrawable(adapter.getContext(), R.drawable.delete);
-            background = new ColorDrawable(Color.BLACK);
+            background = new ColorDrawable(Color.RED);
         }
 
         assert icon != null;
